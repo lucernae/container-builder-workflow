@@ -1,0 +1,22 @@
+# action.yml
+name: 'Sruput'
+description: 'A GitHub action context and metadata handling/processors'
+inputs:
+  config:
+    description: |
+      Newline delimited list of config files
+      A config file overrides the config file above it
+    required: false
+    default: 'sruput.yaml'
+  param:
+    description: |
+      YAML formatted of initial parameter definition
+    required: false
+    default: '{}'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  entrypoint: python
+  args:
+    - ${{ inputs.config }}
+    - ${{ inputs.param }}

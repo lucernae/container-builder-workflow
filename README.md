@@ -164,8 +164,45 @@ The benefit of this approach:
  - Can be hooked to an automatic action to immediately publish the release (or schedule it) via workflow on PR merge
  - `sruput.yaml` can act as a linter or dry-running the release process by checking the resulting metadata
 
-An example workflow action to create a Github Release
+A Git release usually express a snapshot of the repo as a certain tag. This make it a simpler case compared with previous example.
+In the Docker image release workflow above, one repo can output several packages variants from the same source code, because their 
+dependencies are different. In this example, we only output certain product, which is a git tag and github release.
+An example workflow action to create a Github Release.
 
 ```yaml
+name: 'auto-release'
+on:
+  push:
+    paths:
+      # List a file as triggers to tell that we should make a new tag
+      - 'action.yaml'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: lucernae/sruput-action@v1
+        id: meta
+        uses:
+          config: sruput-release.yaml
+      - uses: actions/github-script@v4
+        with:
+          script: |
+            github.git.createTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '${{ steps.meta.outputs.tag }}',
+              object: context.sha,
+              type: 'commit'
+            })
+```
 
+The corresponding `sruput-release.yaml` need to provides a rule to extract the tag.
+
+```yaml
+config:
+  - type: yaml
+    file: action.yaml
+tag:
+  - scalar: '{config["]}
 ```
