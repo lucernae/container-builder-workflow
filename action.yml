@@ -1,5 +1,6 @@
 # action.yml
 name: 'Sruput'
+author: 'Rizky Maulana Nugraha'
 description: 'A GitHub action context and metadata handling/processors'
 inputs:
   config:
@@ -20,3 +21,8 @@ runs:
   args:
     - ${{ inputs.config }}
     - ${{ inputs.param }}
+    - --github
+    - ${{ toJSON(github) }}
+branding:
+  icon: 'coffee'
+  color: 'green'

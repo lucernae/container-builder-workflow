@@ -6,4 +6,4 @@ WORKDIR /sruput
 COPY sruput /sruput
 
 ENTRYPOINT [ "python" ]
-CMD [ "sruput" ]
+CMD [ "-m", "sruput" ]

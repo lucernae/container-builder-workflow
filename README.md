@@ -114,6 +114,9 @@ full-variant-name:
     regex-match: '--prod'
     regex-replace: ''
     input: '{param["full-variant-name"]}'
+calver:
+  - type: datetime
+    format: '%Y.%m.%d'
 tags:
   - and:
       - type: replace
@@ -202,7 +205,7 @@ The corresponding `sruput-release.yaml` need to provides a rule to extract the t
 ```yaml
 config:
   - type: yaml
-    file: action.yaml
+    file: metadata.yaml
 tag:
-  - scalar: '{config["]}
+  - scalar: '{param["config"]["version"]}'
 ```
